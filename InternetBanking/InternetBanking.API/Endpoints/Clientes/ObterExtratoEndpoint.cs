@@ -1,6 +1,7 @@
 ﻿using Ardalis.ApiEndpoints;
 using InternetBanking.API.DTOs.Results;
 using InternetBanking.API.Interfaces.Repositorios;
+using InternetBanking.API.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternetBanking.API.Endpoints.Clientes;
@@ -21,7 +22,7 @@ public class ObterExtratoEndpoint : EndpointBaseAsync
     {
         var cliente = _clienteRepository.ObterExtrato(id);
         if (cliente is null)
-            return NotFound();
+            return NotFound(MensagensRetorno.ClienteNaoEncontrado);
 
         var saldo = new SaldoDTO(cliente.Saldo, DateTime.Now.ToString("s"), cliente.Limite);
         var transacoes = cliente.Transacoes

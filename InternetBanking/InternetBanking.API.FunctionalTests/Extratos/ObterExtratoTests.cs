@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using InternetBanking.API.Endpoints.Clientes;
 using InternetBanking.API.FunctionalTests.Abstractions;
+using InternetBanking.API.Utils;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -40,6 +41,8 @@ namespace InternetBanking.API.FunctionalTests.Extratos
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            var content = await response.Content.ReadAsStringAsync();
+            content.Should().Be(MensagensRetorno.ClienteNaoEncontrado);
         }
     }
 }
