@@ -5,11 +5,11 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternetBanking.API", "InternetBanking.API\InternetBanking.API.csproj", "{1CA3D11E-BDD8-4FFC-B018-64C32632A31D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternetBanking.API.FunctionalTests", "InternetBanking.FunctionalTests\InternetBanking.API.FunctionalTests.csproj", "{51C5B035-8A14-4D73-B71C-7C153CDF1398}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternetBanking.API.UnitTests", "InternetBanking.API.UnitTests\InternetBanking.API.UnitTests.csproj", "{785CBA52-EBE5-4DF9-AE8F-DC6ED9010E9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternetBanking.API.UnitTests", "InternetBanking.API.UnitTests\InternetBanking.API.UnitTests.csproj", "{785CBA52-EBE5-4DF9-AE8F-DC6ED9010E9C}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{5990DC72-8F40-47F8-8CB2-CF2E717C5FE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternetBanking.API.FunctionalTests", "InternetBanking.API.FunctionalTests\InternetBanking.API.FunctionalTests.csproj", "{5B756565-2C49-4FF0-802E-84374A769D24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{1CA3D11E-BDD8-4FFC-B018-64C32632A31D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CA3D11E-BDD8-4FFC-B018-64C32632A31D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CA3D11E-BDD8-4FFC-B018-64C32632A31D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{51C5B035-8A14-4D73-B71C-7C153CDF1398}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51C5B035-8A14-4D73-B71C-7C153CDF1398}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{51C5B035-8A14-4D73-B71C-7C153CDF1398}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51C5B035-8A14-4D73-B71C-7C153CDF1398}.Release|Any CPU.Build.0 = Release|Any CPU
 		{785CBA52-EBE5-4DF9-AE8F-DC6ED9010E9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{785CBA52-EBE5-4DF9-AE8F-DC6ED9010E9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{785CBA52-EBE5-4DF9-AE8F-DC6ED9010E9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{5990DC72-8F40-47F8-8CB2-CF2E717C5FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5990DC72-8F40-47F8-8CB2-CF2E717C5FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5990DC72-8F40-47F8-8CB2-CF2E717C5FE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B756565-2C49-4FF0-802E-84374A769D24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B756565-2C49-4FF0-802E-84374A769D24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B756565-2C49-4FF0-802E-84374A769D24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B756565-2C49-4FF0-802E-84374A769D24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

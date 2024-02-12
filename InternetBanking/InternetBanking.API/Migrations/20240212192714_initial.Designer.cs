@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InternetBanking.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240211224127_initial")]
+    [Migration("20240212192714_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -101,9 +101,8 @@ namespace InternetBanking.API.Migrations
                     b.Property<DateTime>("RealizadaEm")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<char>("Tipo")
+                        .HasColumnType("character(1)");
 
                     b.Property<int>("Valor")
                         .HasColumnType("integer");

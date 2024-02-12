@@ -14,5 +14,7 @@
         public string Nome { get; private set; }
         public int Limite { get; private set; }
         public int Saldo { get; private set; }
+
+        public IEnumerable<Transacao> Transacoes { get; private set; }
     }
 }

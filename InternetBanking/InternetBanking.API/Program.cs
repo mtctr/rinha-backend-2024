@@ -1,17 +1,35 @@
 using InternetBanking.API.Dados;
-using Microsoft.AspNetCore.Mvc;
+using InternetBanking.API.Dados.Repositorios;
+using InternetBanking.API.Interfaces.Repositorios;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers(options =>
+{
+    options.UseNamespaceRouteToken();
+});
+
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseLower;
+});
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
+
+app.UseRouting();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -21,19 +39,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.MapGet("/clientes", ([FromServices] ApplicationDbContext context) =>
-{    
-    return context.Clientes.AsNoTracking().ToList();
-})
-.WithName("ListarClientes")
-.WithOpenApi();
-
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
-}
-
+app.MapControllers();
 app.Run();
 
+public partial class Program;

@@ -36,7 +36,7 @@ namespace InternetBanking.API.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ClienteId = table.Column<int>(type: "integer", nullable: false),
                     Valor = table.Column<int>(type: "integer", nullable: false),
-                    Tipo = table.Column<string>(type: "text", nullable: false),
+                    Tipo = table.Column<char>(type: "character(1)", nullable: false),
                     Descricao = table.Column<string>(type: "text", nullable: false),
                     RealizadaEm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
