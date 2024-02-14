@@ -38,7 +38,7 @@ namespace InternetBanking.API.Migrations
                     Valor = table.Column<int>(type: "integer", nullable: false),
                     Tipo = table.Column<char>(type: "character(1)", nullable: false),
                     Descricao = table.Column<string>(type: "text", nullable: false),
-                    RealizadaEm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    RealizadaEm = table.Column<DateTime>(type: "Timestamp", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InternetBanking.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240212192714_initial")]
+    [Migration("20240213233253_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -99,7 +99,7 @@ namespace InternetBanking.API.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("RealizadaEm")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("Timestamp");
 
                     b.Property<char>("Tipo")
                         .HasColumnType("character(1)");
@@ -117,12 +117,17 @@ namespace InternetBanking.API.Migrations
             modelBuilder.Entity("InternetBanking.API.Entidades.Transacao", b =>
                 {
                     b.HasOne("InternetBanking.API.Entidades.Cliente", "Cliente")
-                        .WithMany()
+                        .WithMany("Transacoes")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Cliente");
+                });
+
+            modelBuilder.Entity("InternetBanking.API.Entidades.Cliente", b =>
+                {
+                    b.Navigation("Transacoes");
                 });
 #pragma warning restore 612, 618
         }

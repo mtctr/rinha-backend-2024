@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InternetBanking.API.Endpoints.Clientes;
 
-public class ObterExtratoEndpoint : EndpointBaseAsync
+public sealed class ObterExtratoEndpoint : EndpointBaseAsync
     .WithRequest<int>
     .WithResult<ActionResult<ObterExtratoResponse>>
 {
@@ -20,7 +20,7 @@ public class ObterExtratoEndpoint : EndpointBaseAsync
     [HttpGet("/clientes/{id}/extrato")]
     public override async Task<ActionResult<ObterExtratoResponse>> HandleAsync([FromRoute]int id, CancellationToken cancellationToken = default)
     {
-        var cliente = _clienteRepository.ObterExtrato(id);
+        var cliente = _clienteRepository.Obter(id);
         if (cliente is null)
             return NotFound(MensagensRetorno.ClienteNaoEncontrado);
 

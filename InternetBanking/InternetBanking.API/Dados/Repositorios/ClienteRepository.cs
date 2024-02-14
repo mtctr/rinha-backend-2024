@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InternetBanking.API.Dados.Repositorios
 {
-    public class ClienteRepository : IClienteRepository
+    public sealed class ClienteRepository : IClienteRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -13,12 +13,16 @@ namespace InternetBanking.API.Dados.Repositorios
             _context = context;
         }
 
-        public Cliente? ObterExtrato(int id)
+        public void Atualizar(Cliente cliente)
+        {
+            _context.Update(cliente);            
+        }
+
+        public Cliente? Obter(int id)
         {
             return _context.Clientes
                 .Include(x => x.Transacoes)
                 .FirstOrDefault(x => x.Id == id);
-
         }
     }
 }

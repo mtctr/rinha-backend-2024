@@ -1,7 +1,13 @@
 ﻿namespace InternetBanking.API.Entidades
 {
-    public class Transacao
+    public sealed class Transacao
     {
+        public static IDictionary<char, string> TIPOS_TRANSACAO = new Dictionary<char, string>
+        {
+            {'c', "Crédito" },
+            {'d', "Débito" }
+        };
+
         public Guid Id { get; init; } = Guid.NewGuid();
         public required int ClienteId { get; init; }
         public required int Valor { get; init; }
@@ -10,8 +16,8 @@
         public DateTime RealizadaEm { get; init; } = DateTime.Now;
 
 
-        public bool EhCredito => Tipo.Equals("c");
-        public bool EhDebito => Tipo.Equals("d");
+        public bool EhCredito => Tipo.Equals('c');
+        public bool EhDebito => Tipo.Equals('d');
 
         public Cliente Cliente { get; init; }
     }
