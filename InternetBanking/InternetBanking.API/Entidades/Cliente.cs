@@ -19,11 +19,12 @@ public sealed class Cliente
 
     public bool PodeRealizarTransacao(Transacao transacao)
     {
-        if (transacao.EhCredito) return true;
+        if (transacao.Valor < 0) return false;
+        if (transacao.EhCredito) return true;       
         if (transacao.EhDebito)
         {
             if (Limite >= Math.Abs(Saldo - transacao.Valor)) return true;
-            return false;
+            else return false;
         }
         return false;
     }
