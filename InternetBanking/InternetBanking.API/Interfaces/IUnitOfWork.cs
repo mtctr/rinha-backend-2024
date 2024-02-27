@@ -1,10 +1,14 @@
-﻿using System.Transactions;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System.Transactions;
 
 namespace InternetBanking.API.Interfaces
 {
     public interface IUnitOfWork
     {
-        TransactionScope BeginTransaction();        
-        void Commit(TransactionScope scope);
+        IExecutionStrategy GetExecutionStrategy();
+        TransactionScope BeginTransaction();
+        Task Commit(TransactionScope scope);
+        void Rollback();
+
     }
 }

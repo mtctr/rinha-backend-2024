@@ -1,7 +1,13 @@
-﻿ namespace InternetBanking.API.Entidades;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InternetBanking.API.Entidades;
 
 public sealed class Cliente
 {
+    private Cliente()
+    {
+
+    }
     public Cliente(int id, string nome, int limite, int saldo)
     {
         Id = id;
@@ -15,12 +21,14 @@ public sealed class Cliente
     public int Limite { get; private set; }
     public int Saldo { get; private set; }
 
+    public uint ConcurrencyToken { get; private set; }
+
     public IEnumerable<Transacao> Transacoes { get; private set; }
 
     public bool PodeRealizarTransacao(Transacao transacao)
     {
         if (transacao.Valor < 0) return false;
-        if (transacao.EhCredito) return true;       
+        if (transacao.EhCredito) return true;
         if (transacao.EhDebito)
         {
             if (Limite >= Math.Abs(Saldo - transacao.Valor)) return true;
@@ -30,10 +38,10 @@ public sealed class Cliente
     }
 
     public void RealizarTransacao(Transacao transacao)
-    {        
+    {
         if (transacao.EhCredito)
             Saldo = Saldo + transacao.Valor;
         else if (transacao.EhDebito)
-            Saldo = Saldo - transacao.Valor;        
+            Saldo = Saldo - transacao.Valor;
     }
 }

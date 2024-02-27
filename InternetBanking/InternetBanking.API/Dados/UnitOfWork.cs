@@ -1,4 +1,7 @@
-﻿using InternetBanking.API.Interfaces;
+﻿using InternetBanking.API.Entidades;
+using InternetBanking.API.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Transactions;
 
 namespace InternetBanking.API.Dados;
@@ -12,14 +15,26 @@ public sealed class UnitOfWork : IUnitOfWork
         _context = context;
     }
 
+    public IExecutionStrategy GetExecutionStrategy()
+    {
+        return _context.Database.CreateExecutionStrategy();
+    }
     public TransactionScope BeginTransaction()
-    {        
-        return new TransactionScope();
+    {
+        var options = new TransactionOptions
+        {
+            IsolationLevel = IsolationLevel.Serializable
+        };
+        return new TransactionScope(TransactionScopeOption.Required, options, TransactionScopeAsyncFlowOption.Enabled);
     }
 
-    public void Commit(TransactionScope scope)
+    public async Task Commit(TransactionScope scope)
     {
-        _context.SaveChanges();
         scope.Complete();
-    }    
+    }
+
+    public void Rollback()
+    {
+
+    }
 }

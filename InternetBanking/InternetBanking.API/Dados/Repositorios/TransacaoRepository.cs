@@ -12,9 +12,9 @@ namespace InternetBanking.API.Dados.Repositorios
             _context = context;
         }
 
-        public void Adicionar(Transacao transacao)
+        public async Task Adicionar(Transacao transacao)
         {
-            _context.Transacoes.Add(transacao);
+            await _context.Transacoes.AddAsync(transacao);
         }
     }
 }

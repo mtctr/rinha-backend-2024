@@ -1,4 +1,5 @@
-﻿using InternetBanking.API.Entidades;
+﻿using Dapper;
+using InternetBanking.API.Entidades;
 using InternetBanking.API.Interfaces.Repositorios;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,16 +14,28 @@ namespace InternetBanking.API.Dados.Repositorios
             _context = context;
         }
 
-        public void Atualizar(Cliente cliente)
+        public async Task Atualizar(Cliente cliente)
         {
-            _context.Update(cliente);            
+            await _context.Clientes
+                .Where(x => x.Id.Equals(cliente.Id))
+                .ExecuteUpdateAsync(x => x.SetProperty(c => c.Saldo, cliente.Saldo));
         }
 
-        public Cliente? Obter(int id)
+        public async Task<Cliente?> Extrato(int id)
         {
-            return _context.Clientes
-                .Include(x => x.Transacoes)
-                .FirstOrDefault(x => x.Id == id);
+            return await _context.Clientes
+               .Include(x => x.Transacoes)
+               .AsNoTracking()
+               .SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Cliente?> Obter(int id)
+        {
+            var query = "SELECT * FROM \"Clientes\" WHERE \"Id\" = @Id";
+            var param = new { Id = id };
+
+            var cnn = _context.Database.GetDbConnection();
+            return await cnn.QuerySingleOrDefaultAsync<Cliente>(query, param);
         }
     }
 }

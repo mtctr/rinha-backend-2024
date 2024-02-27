@@ -5,6 +5,8 @@ using InternetBanking.API.Interfaces.Repositorios;
 using InternetBanking.API.Utils;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 
 namespace InternetBanking.API.Endpoints.Clientes;
 
@@ -25,38 +27,70 @@ public sealed class RealizarTransacaoEndpoint : EndpointBaseAsync
     }
 
     [HttpPost("/clientes/{id}/transacoes")]
-    public override async Task<ActionResult<RealizarTransacaoResult>> HandleAsync([FromRoute]RealizarTransacaoRequest request, CancellationToken cancellationToken = default)
+    public override async Task<ActionResult<RealizarTransacaoResult>> HandleAsync([FromRoute] RealizarTransacaoRequest request, CancellationToken cancellationToken = default)
     {
 
-        if (!Transacao.TIPOS_TRANSACAO.TryGetValue(request.Transacao.Tipo, out var tipoTransacao))
+        if (!request.EhValido())
             return BadRequest(MensagensRetorno.TipoInvalido);
-        
-        var cliente = _clienteRepository.Obter(request.Id);
-        if (cliente is null)
-            return NotFound(MensagensRetorno.ClienteNaoEncontrado);
 
-        var transacao = new Transacao { 
-            ClienteId = request.Id, 
-            Descricao =  request.Transacao.Descricao,
-            Tipo = request.Transacao.Tipo,
-            Valor = request.Transacao.Valor,
-        };
-        if (!cliente.PodeRealizarTransacao(transacao))
-            return UnprocessableEntity(MensagensRetorno.SaldoInconsistente);
 
-        cliente.RealizarTransacao(transacao);
-       
-        using (var scope = _unitOfWork.BeginTransaction())
+        var executionStrategy = _unitOfWork.GetExecutionStrategy();
+        var result = await executionStrategy.ExecuteAsync(async Task<ActionResult> () =>
         {
-            _transacaoRepository.Adicionar(transacao);
-            _clienteRepository.Atualizar(cliente);
-            _unitOfWork.Commit(scope);
-        }        
-        
-        return Ok(new RealizarTransacaoResult(cliente.Limite,cliente.Saldo));
+            var cliente = await _clienteRepository.Obter(request.Id);
+            if (cliente is null)
+                return NotFound(MensagensRetorno.ClienteNaoEncontrado);
+
+
+            var transacao = new Transacao
+            {
+                ClienteId = request.Id,
+                Descricao = request.Transacao.Descricao,
+                Tipo = request.Transacao.Tipo,
+                Valor = request.Transacao.Valor,
+            };
+            if (!cliente.PodeRealizarTransacao(transacao))
+                return UnprocessableEntity(MensagensRetorno.SaldoInconsistente);
+
+            using var scope = _unitOfWork.BeginTransaction();
+            cliente.RealizarTransacao(transacao);
+
+            await _clienteRepository.Atualizar(cliente);
+            await _transacaoRepository.Adicionar(transacao);
+            try
+            {
+                await _unitOfWork.Commit(scope);
+            }
+            catch
+            {
+                _unitOfWork.Rollback();
+                throw;
+            }
+
+            return Ok(new RealizarTransacaoResult(cliente.Limite, cliente.Saldo));
+        });
+
+        return result;
     }
 }
 
-public record RealizarTransacaoRequest([FromRoute(Name = "id")] int Id, [FromBody] TransacaoBody Transacao);
+public sealed class RealizarTransacaoRequest
+{
+    private IDictionary<char, string> TIPOS_TRANSACAO = new Dictionary<char, string>
+        {
+            {'c', "Crédito" },
+            {'d', "Débito" }
+        };
+    [FromRoute(Name = "id")] public int Id { get; set; }
+    [FromBody] public TransacaoBody Transacao { get; set; }
+
+    public bool EhValido()
+    {
+        return TIPOS_TRANSACAO.TryGetValue(Transacao.Tipo, out var tipoTransacao)
+            && Transacao.Valor > 0
+            && Transacao.Descricao.Length >= 1
+            && Transacao.Descricao.Length <= 10;
+    }
+}
 public record TransacaoBody(int Valor, char Tipo, string Descricao);
 public record RealizarTransacaoResult(int Limite, int Saldo);

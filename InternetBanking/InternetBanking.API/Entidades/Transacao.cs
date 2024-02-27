@@ -2,11 +2,6 @@
 {
     public sealed class Transacao
     {
-        public static IDictionary<char, string> TIPOS_TRANSACAO = new Dictionary<char, string>
-        {
-            {'c', "Crédito" },
-            {'d', "Débito" }
-        };
 
         public Guid Id { get; init; } = Guid.NewGuid();
         public required int ClienteId { get; init; }

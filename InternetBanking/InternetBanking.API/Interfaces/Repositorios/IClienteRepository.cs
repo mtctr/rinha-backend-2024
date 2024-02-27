@@ -4,7 +4,8 @@ namespace InternetBanking.API.Interfaces.Repositorios
 {
     public interface IClienteRepository
     {
-        public Cliente? Obter(int id);
-        public void Atualizar(Cliente cliente);
+        public Task<Cliente?> Obter(int id);
+        public Task<Cliente?> Extrato(int id);
+        public Task Atualizar(Cliente cliente);
     }
 }

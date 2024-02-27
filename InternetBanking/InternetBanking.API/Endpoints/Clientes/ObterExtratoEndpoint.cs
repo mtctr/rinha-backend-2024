@@ -3,6 +3,7 @@ using InternetBanking.API.DTOs.Results;
 using InternetBanking.API.Interfaces.Repositorios;
 using InternetBanking.API.Utils;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 namespace InternetBanking.API.Endpoints.Clientes;
 
@@ -20,7 +21,7 @@ public sealed class ObterExtratoEndpoint : EndpointBaseAsync
     [HttpGet("/clientes/{id}/extrato")]
     public override async Task<ActionResult<ObterExtratoResponse>> HandleAsync([FromRoute]int id, CancellationToken cancellationToken = default)
     {
-        var cliente = _clienteRepository.Obter(id);
+        var cliente = await _clienteRepository.Extrato(id);
         if (cliente is null)
             return NotFound(MensagensRetorno.ClienteNaoEncontrado);
 
@@ -34,4 +35,16 @@ public sealed class ObterExtratoEndpoint : EndpointBaseAsync
     }
 }
 
-public record ObterExtratoResponse(SaldoDTO Saldo, IEnumerable<TransacaoDTO> UltimasTransacoes);
+public sealed class ObterExtratoResponse {
+    public ObterExtratoResponse(SaldoDTO saldo, IEnumerable<TransacaoDTO> ultimasTransacoes)
+    {
+        Saldo = saldo;
+        UltimasTransacoes = ultimasTransacoes;
+    }
+
+    [JsonPropertyName("saldo")]
+    public SaldoDTO Saldo { get; init; }
+    
+    [JsonPropertyName("ultimas_transacoes")]
+    public IEnumerable<TransacaoDTO> UltimasTransacoes { get; init; }
+}

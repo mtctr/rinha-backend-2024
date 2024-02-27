@@ -30,6 +30,12 @@ namespace InternetBanking.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<uint>("ConcurrencyToken")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
                     b.Property<int>("Limite")
                         .HasColumnType("integer");
 
@@ -48,6 +54,7 @@ namespace InternetBanking.API.Migrations
                         new
                         {
                             Id = 1,
+                            ConcurrencyToken = 0u,
                             Limite = 100000,
                             Nome = "Fulano 1",
                             Saldo = 0
@@ -55,6 +62,7 @@ namespace InternetBanking.API.Migrations
                         new
                         {
                             Id = 2,
+                            ConcurrencyToken = 0u,
                             Limite = 80000,
                             Nome = "Fulano 2",
                             Saldo = 0
@@ -62,6 +70,7 @@ namespace InternetBanking.API.Migrations
                         new
                         {
                             Id = 3,
+                            ConcurrencyToken = 0u,
                             Limite = 1000000,
                             Nome = "Fulano 3",
                             Saldo = 0
@@ -69,6 +78,7 @@ namespace InternetBanking.API.Migrations
                         new
                         {
                             Id = 4,
+                            ConcurrencyToken = 0u,
                             Limite = 10000000,
                             Nome = "Fulano 4",
                             Saldo = 0
@@ -76,6 +86,7 @@ namespace InternetBanking.API.Migrations
                         new
                         {
                             Id = 5,
+                            ConcurrencyToken = 0u,
                             Limite = 500000,
                             Nome = "Fulano 5",
                             Saldo = 0

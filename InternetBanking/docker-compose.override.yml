@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.5'
 
 services:
   internetbanking.api01:
@@ -6,8 +6,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8081      
     ports:
-      - "5000"
-      - "5001"
+      - "8081"      
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
@@ -16,8 +15,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8082      
     ports:
-      - "5002"
-      - "5003"
+      - "8082"      
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
