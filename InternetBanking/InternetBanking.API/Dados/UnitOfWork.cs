@@ -23,7 +23,7 @@ public sealed class UnitOfWork : IUnitOfWork
     {
         var options = new TransactionOptions
         {
-            IsolationLevel = IsolationLevel.Serializable
+            IsolationLevel = IsolationLevel.ReadCommitted
         };
         return new TransactionScope(TransactionScopeOption.Required, options, TransactionScopeAsyncFlowOption.Enabled);
     }
